@@ -1,21 +1,23 @@
 pipeline{
-    agent{bode{label'buildfarm'}}
+    agent{node{label 'buildfarm'}}
     stages{
-        stage('Clone Repo')
-        {
+        stage('Git Checkout'){
+            steps{
             sh 'git clone"https://github.com/Tinesh379/webapp.git"'
-            sh 'ls -altr'
+            }
         }
         stage('Build'){
-            sh 'mvn clean install'
-            
+            steps{
+                sh 'ls -altr'
+                sh 'cd webapp'
+                sh 'mvn clean package'
+            }
         }
+        
     }
-      post{
+    post{
         always{
-            cleanWs()
+            cleanWS()
         }
-      }
-    
     }
 }
