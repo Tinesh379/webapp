@@ -26,7 +26,7 @@ pipeline{
         }
         stage('Deploy to Nexus'){
             steps{
-                nexusArtifactUploader artifacts: [[artifactId: '${POM_ARTIFACTID}', classifier: '', file: 'target/{POM_ARTIFACTID}.{POM_PACKAGING}', type: '{POM_PACKAGING}']], credentialsId: 'nexus', groupId: '${POM_GROUPID}', nexusUrl: 'localhost:8081', nexusVersion: 'nexus3', protocol: 'http', repository: 'webapp-snapshots', version: '${POM_VERSION}'
+                nexusArtifactUploader artifacts: [[artifactId: '${POM_ARTIFACTID}', classifier: '', file: 'target/${POM_ARTIFACTID}.${POM_PACKAGING}', type: '{POM_PACKAGING}']], credentialsId: 'nexus', groupId: '${POM_GROUPID}', nexusUrl: 'localhost:8081', nexusVersion: 'nexus3', protocol: 'http', repository: 'webapp-snapshots', version: '${POM_VERSION}'
             }
         }
         
