@@ -3,7 +3,7 @@ pipeline{
     stages{
         stage('Git Checkout'){
             steps{
-            sh 'git clone"https://github.com/Tinesh379/webapp.git"'
+            sh 'git clone "https://github.com/Tinesh379/webapp.git"'
             }
         }
         stage('Build'){
