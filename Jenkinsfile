@@ -18,18 +18,37 @@ pipeline{
                 sh "mvn test"
             }
         }
-        stage('Deployment'){
-            steps{
-
-                deploy adapters: [tomcat9(credentialsId: 'tomcat-manager', path: '', url: 'http://192.168.1.101:8080')], contextPath: null, war: 'target/*.war'
-            }
-        }
+        
         stage('Deploy to Nexus'){
             steps{
-                nexusArtifactUploader artifacts: [[artifactId: '${POM_ARTIFACTID}', classifier: '', file: 'target/webapp.war', type: '{POM_PACKAGING}']], credentialsId: 'nexus', groupId: '${POM_GROUPID}', nexusUrl: '192.168.1.101:8081', nexusVersion: 'nexus3', protocol: 'http', repository: 'webapp-snapshots', version: '${POM_VERSION}'
-            }
+                script{
+                    pom = readMavenPom file: "pom.xml"
+                     nexusArtifactUploader(
+                            nexusVersion: "nexus3",
+                            protocol: "http",
+                            nexusUrl: "192.168.1.101:8081",
+                            groupId: pom.groupId,
+                            version: pom.version,
+                            repository: "webapp-releases",
+                            credentialsId: "nexus",
+                            artifacts: [
+                                // Artifact generated such as .jar, .ear and .war files.
+                                [artifactId: pom.artifactId,
+                                classifier: '',
+                                 file: "target/webapp.war",
+                                type: pom.packaging],
+
+                                // Lets upload the pom.xml file for additional information for Transitive dependencies
+                                [artifactId: pom.artifactId,
+                                classifier: '',
+                                file: "pom.xml",
+                                type: "pom"]
+                            ]
+                        );
+
+                    }  
+            }  
         }
-        
         
     }
     post{
