@@ -1,3 +1,5 @@
+@Library('shared-library) _
+
 pipeline{
     agent{node{label 'buildfarm'}}
     stages{
@@ -8,9 +10,8 @@ pipeline{
         }
         stage('Build'){
             steps{
-                sh 'ls -altr'
-                sh 'cd webapp'
-                sh 'mvn clean package'
+                
+                mavenGoals()
             }
         }
         stage('Junit'){
